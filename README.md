@@ -1,2 +1,2 @@
-# EndlessRunner
-Endless Runner 2D Game in Unity Project for final exam
+# Minigames compilation
+DATN Tong Hop Minigames
