@@ -1,0 +1,227 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class Dot : MonoBehaviour
+{
+    [Header("Board Variables")]
+    public int column;
+    public int row;
+    public int previousColumn;
+    public int previousRow;
+    public int targetX;
+    public int targetY;
+    public bool isMatched = false;
+    private Board board;
+    private GameObject otherDot;
+    private Vector2 firstTouchPosition;
+    private Vector2 finalTouchPosition;
+    private Vector2 tempPosition;
+    public float swipeAngle = 0;
+    public float swipeResist = 1f;
+
+    void Start()
+    {
+        // Updated to the modern Unity method to find the Board script
+        board = Object.FindFirstObjectByType<Board>();
+
+        //targetX = (int)transform.position.x;
+        //targetY = (int)transform.position.y;
+        //row = targetY;
+        //column = targetX;
+        //previousColumn = column;
+        //previousRow = row;
+    }
+
+    void Update()
+    {
+        FindMatches();
+        if (isMatched)
+        {
+            SpriteRenderer mySprite = GetComponent<SpriteRenderer>();
+            mySprite.color = new Color(1f, 1f, 1f, .2f);
+        }
+        targetX = column;
+        targetY = row;
+        if (Mathf.Abs(targetX - transform.position.x) > .1)
+        {
+            // Move towards the target
+            tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
+            if (board.allDots[column, row] != this.gameObject)
+            {
+                board.allDots[column, row] = this.gameObject;
+            }
+        }
+        else
+        {
+            // Directly set the position to the target
+            tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = tempPosition;
+            board.allDots[column, row] = this.gameObject;
+        }
+
+        if (Mathf.Abs(targetY - transform.position.y) > .1)
+        {
+            // Move towards the target
+            tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, .6f);
+        }
+        else
+        {
+            // Directly set the position to the target
+            tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = tempPosition;
+            board.allDots[column, row] = this.gameObject;
+        }
+    }
+
+    public IEnumerator CheckMoveCo()
+    {
+        yield return new WaitForSeconds(.5f);
+        if (otherDot != null)
+        {
+            FindMatches();
+            otherDot.GetComponent<Dot>().FindMatches();
+            if (!isMatched && !otherDot.GetComponent<Dot>().isMatched)
+            {
+                otherDot.GetComponent<Dot>().row = row;
+                otherDot.GetComponent<Dot>().column = column;
+                row = previousRow;
+                column = previousColumn;
+
+                board.allDots[column, row] = this.gameObject;
+                board.allDots[otherDot.GetComponent<Dot>().column, otherDot.GetComponent<Dot>().row] = otherDot;
+
+                yield return new WaitForSeconds(.5f);
+                board.currentState = GameState.move;
+
+            }
+            else
+            {
+                board.DestroyMatches();
+            }
+            otherDot = null;
+        }
+    }
+
+    private void OnPointerDown()
+    {
+        if (board.currentState == GameState.move)
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            firstTouchPosition = Camera.main.ScreenToWorldPoint(mousePos);
+        }
+    }
+
+    private void OnPointerUp()
+    {
+        if(board.currentState == GameState.move)
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            finalTouchPosition = Camera.main.ScreenToWorldPoint(mousePos);
+            CalculateAngle();
+        }
+    }
+
+    private void OnMouseDown() { OnPointerDown(); }
+    private void OnMouseUp() { OnPointerUp(); }
+
+    void CalculateAngle()
+    {
+        if(Mathf.Abs(finalTouchPosition.y -firstTouchPosition.y) > swipeResist || Mathf.Abs(finalTouchPosition.x - firstTouchPosition.x) > swipeResist)
+        {
+            swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
+            MovePieces();
+            board.currentState = GameState.wait;
+        }
+        else
+        {
+            board.currentState = GameState.move;
+        }
+    }
+
+    void MovePieces()
+    {
+
+        // Swipe Right
+        if (swipeAngle > -45 && swipeAngle <= 45 && column < board.width - 1)
+        {
+            otherDot = board.allDots[column + 1, row];
+            previousColumn = column;
+            previousRow = row;
+            otherDot.GetComponent<Dot>().column -= 1;
+            column += 1;
+        }
+        // Swipe Up
+        else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1)
+        {
+            otherDot = board.allDots[column, row + 1];
+            previousColumn = column;
+            previousRow = row;
+            otherDot.GetComponent<Dot>().row -= 1;
+            row += 1;
+        }
+        // Swipe Left
+        else if ((swipeAngle > 135 || swipeAngle <= -135) && column > 0)
+        {
+            otherDot = board.allDots[column - 1, row];
+            previousColumn = column;
+            previousRow = row;
+            otherDot.GetComponent<Dot>().column += 1;
+            column -= 1;
+        }
+        // Swipe Down
+        else if (swipeAngle < -45 && swipeAngle >= -135 && row > 0)
+        {
+            otherDot = board.allDots[column, row - 1];
+            previousColumn = column;
+            previousRow = row;
+            otherDot.GetComponent<Dot>().row += 1;
+            row -= 1;
+        }
+
+        if (otherDot != null)
+        {
+            board.allDots[column, row] = this.gameObject;
+            board.allDots[otherDot.GetComponent<Dot>().column, otherDot.GetComponent<Dot>().row] = otherDot;
+        }
+    StartCoroutine(CheckMoveCo());
+    }
+
+    public void FindMatches()
+    {
+        // 1. Strict Horizontal Check (Must be a true line of 3)
+        if (column > 0 && column < board.width - 1)
+        {
+            GameObject leftDot = board.allDots[column - 1, row];
+            GameObject rightDot = board.allDots[column + 1, row];
+            if (leftDot != null && rightDot != null)
+            {
+                if (leftDot.tag == this.gameObject.tag && rightDot.tag == this.gameObject.tag)
+                {
+                    leftDot.GetComponent<Dot>().isMatched = true;
+                    rightDot.GetComponent<Dot>().isMatched = true;
+                    this.isMatched = true;
+                }
+            }
+        }
+
+        // 2. Strict Vertical Check (Must be a true line of 3)
+        if (row > 0 && row < board.height - 1)
+        {
+            GameObject upDot = board.allDots[column, row + 1];
+            GameObject downDot = board.allDots[column, row - 1];
+            if (upDot != null && downDot != null)
+            {
+                if (upDot.tag == this.gameObject.tag && downDot.tag == this.gameObject.tag)
+                {
+                    upDot.GetComponent<Dot>().isMatched = true;
+                    downDot.GetComponent<Dot>().isMatched = true;
+                    this.isMatched = true;
+                }
+            }
+        }
+    }
+
+}

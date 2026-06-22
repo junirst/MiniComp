@@ -2,16 +2,16 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
-  - Obstacle
-  - Goal
-  - Level
-  - Ball
-  - Bullet
-  - EnemyBullet
-  - Food
-  - Wall
+  - yellow dot
+  - teal dot
+  - red dot
+  - purple dot
+  - pink dot
+  - orange dot
+  - green dot
+  - blue dot
   layers:
   - Default
   - TransparentFX
@@ -19,10 +19,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
-  - Player
-  - Obstacle
-  - Minimap
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -49,9 +49,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ball
-    uniqueID: 1294220701
-    locked: 0
-  - name: Goal
-    uniqueID: 961787701
-    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []
