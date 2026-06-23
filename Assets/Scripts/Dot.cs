@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Dot : MonoBehaviour
 {
@@ -105,27 +104,16 @@ public class Dot : MonoBehaviour
         }
     }
 
-    private void OnPointerDown()
+    private void OnMouseDown()
     {
-        if (board.currentState == GameState.move)
-        {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            firstTouchPosition = Camera.main.ScreenToWorldPoint(mousePos);
-        }
+        firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    private void OnPointerUp()
+    private void OnMouseUp()
     {
-        if(board.currentState == GameState.move)
-        {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            finalTouchPosition = Camera.main.ScreenToWorldPoint(mousePos);
-            CalculateAngle();
-        }
+        finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        CalculateAngle();
     }
-
-    private void OnMouseDown() { OnPointerDown(); }
-    private void OnMouseUp() { OnPointerUp(); }
 
     void CalculateAngle()
     {
