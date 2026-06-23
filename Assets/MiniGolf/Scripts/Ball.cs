@@ -26,7 +26,7 @@ public class Ball : MonoBehaviour
 
         PlayerInput();
 
-        if (LevelManager.main.outOfStrokes && rb.velocity.magnitude <= 0.2f && !LevelManager.main.levelCompleted)
+        if (LevelManager.main.outOfStrokes && rb.linearVelocity.magnitude <= 0.2f && !LevelManager.main.levelCompleted)
         {
             LevelManager.main.GameOver();
         }
@@ -34,7 +34,7 @@ public class Ball : MonoBehaviour
 
     private bool isReady()
     {
-        return rb.velocity.magnitude <= 0.2f;
+        return rb.linearVelocity.magnitude <= 0.2f;
     }
 
     private void PlayerInput()
@@ -78,18 +78,18 @@ public class Ball : MonoBehaviour
 
         Vector2 dir = (Vector2)transform.position - pos;
 
-        rb.velocity = Vector2.ClampMagnitude(dir * power, maxPower);
+        rb.linearVelocity = Vector2.ClampMagnitude(dir * power, maxPower);
     }
 
     private void CheckWinState()
     {
         if (inHole) return;
 
-        if(rb.velocity.magnitude <= maxGoalSpeed)
+        if(rb.linearVelocity.magnitude <= maxGoalSpeed)
         {
             inHole = true;
 
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             gameObject.SetActive(false);
 
             GameObject fx = Instantiate(goalFX, transform.position, Quaternion.identity);

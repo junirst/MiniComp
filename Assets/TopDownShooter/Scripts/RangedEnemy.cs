@@ -55,9 +55,9 @@ public class RangedEnemy : MonoBehaviour
         {
             if (Vector2.Distance(target.position, transform.position) >= distanceToShoot)
             {
-            rb.velocity = transform.up * speed;
+            rb.linearVelocity = transform.up * speed;
             } else {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             }
         }
     }
