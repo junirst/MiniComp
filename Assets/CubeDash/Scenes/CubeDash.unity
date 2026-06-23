@@ -2609,7 +2609,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 107472952, guid: 5cf684b39f71c294f8b288d2d10e7b9e, type: 3}
+  m_Sprite: {fileID: -716045684, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3059,6 +3059,7 @@ GameObject:
   - component: {fileID: 1339876579}
   - component: {fileID: 1339876578}
   - component: {fileID: 1339876581}
+  - component: {fileID: 1339876582}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -3088,6 +3089,7 @@ MonoBehaviour:
   groundDistance: 0.25
   jumpTime: 0.5
   crouchHeight: 0.5
+  animatorController: {fileID: 1339876582}
 --- !u!50 &1339876579
 Rigidbody2D:
   serializedVersion: 4
@@ -3144,6 +3146,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de8ac7562a361d4ca42a1abe211e78c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1339876582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339876577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7362220becd184b8d7230e5924fd88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 1123399959}
+  animationFrameRate: 0.1
+  idleFrames:
+  - {fileID: -716045684, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 274376622, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 143491458, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -443569049, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  runningFrames:
+  - {fileID: -273891572, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 2140955710, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -163547351, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -209332454, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -1186396195, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 63729948, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 81271823, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1387647407, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -798834588, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -524895793, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1973398918, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 823822673, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 487775285, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -2146547376, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1211520428, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 817928205, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  crouchingFrames:
+  - {fileID: -201732330, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -1182786830, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1281102593, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1231217512, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1182180918, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: -774200487, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1031505490, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 758662726, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  deadFrames:
+  - {fileID: 1171381450, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 1924016097, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 2034070407, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
+  - {fileID: 795401193, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
 --- !u!1 &1381078806
 GameObject:
   m_ObjectHideFlags: 0

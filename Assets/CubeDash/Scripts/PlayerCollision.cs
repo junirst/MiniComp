@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PlayerCollison : MonoBehaviour
 {
+    private AnimatorController animatorController;
+
     private void Start()
     {
+        animatorController = GetComponent<AnimatorController>();
         CubeGameManager.Instance.onPlay.AddListener(ActivatePlayer);
     }
     private void ActivatePlayer () 
@@ -17,8 +20,15 @@ public class PlayerCollison : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             AudioManager.Instance?.PlayHitSfx();
+            
+            if (animatorController != null)
+            {
+                animatorController.SetAnimationState(AnimatorController.AnimationState.Dead);
+            }
+            
             gameObject.SetActive(false);
             CubeGameManager.Instance.GameOver();
         }
     }
 }
+

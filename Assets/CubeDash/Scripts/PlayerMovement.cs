@@ -12,11 +12,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDistance = 0.25f;
     [SerializeField] private float jumpTime = 0.3f;
     [SerializeField] private float crouchHeight = 0.5f;
+    [SerializeField] private AnimatorController animatorController;
 
     private bool isGrounded = false;
     private bool isJumping = false;
     private bool wasCrouching = false;
     private float jumpTimer;
+
+    private void Start()
+    {
+        if (animatorController == null)
+        {
+            animatorController = GetComponent<AnimatorController>();
+        }
+    }
 
     private void Update()
     {
@@ -76,6 +85,29 @@ public class PlayerMovement : MonoBehaviour
         wasCrouching = isCrouching;
 
         #endregion
+
+        #region ANIMATION
+
+        UpdateAnimationState(isCrouching);
+
+        #endregion
+    }
+
+    private void UpdateAnimationState(bool isCrouching)
+    {
+        if (animatorController == null)
+            return;
+
+        if (isCrouching)
+        {
+            animatorController.SetAnimationState(AnimatorController.AnimationState.Crouching);
+        }
+        else
+        {
+            // Default to running state (can be changed to idle if needed based on velocity)
+            animatorController.SetAnimationState(AnimatorController.AnimationState.Running);
+        }
     }
 }
+
 
