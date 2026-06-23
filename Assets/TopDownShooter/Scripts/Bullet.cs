@@ -20,6 +20,6 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = transform.up * speed;
+        rb.velocity = transform.up * speed;
     }
 }

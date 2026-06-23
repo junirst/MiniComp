@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.linearVelocity = transform.up * speed;
+        rb.velocity = transform.up * speed;
     }
 
     private void RotateTowardsTarget()

@@ -70,6 +70,6 @@ public class ObstacleSpawner : MonoBehaviour
         GameObject spawnedObstacle = Instantiate(obstacleToSpawn, transform.position, Quaternion.identity);
         spawnedObstacle.transform.parent = obstacleParent;
         Rigidbody2D obstacleRB = spawnedObstacle.GetComponent<Rigidbody2D>();
-        obstacleRB.linearVelocity = Vector2.left * _obstacleSpeed;
+        obstacleRB.velocity = Vector2.left * _obstacleSpeed;
     }
 }

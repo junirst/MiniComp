@@ -60,12 +60,12 @@ public class MenuBall : MonoBehaviour
 
         Vector2 dir = (Vector2)transform.position - pos;
 
-        rb.linearVelocity = Vector2.ClampMagnitude(dir * power, maxPower);
+        rb.velocity = Vector2.ClampMagnitude(dir * power, maxPower);
     }
 
     private void CheckWinState()
     {
-        rb.linearVelocity = Vector2.zero;
+        rb.velocity = Vector2.zero;
         gameObject.SetActive(false);
 
         GameObject fx = Instantiate(goalFX, transform.position, Quaternion.identity);

@@ -27,14 +27,14 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             isJumping = true;
-            rb.linearVelocity = Vector2.up * jumpForce;
+            rb.velocity = Vector2.up * jumpForce;
             AudioManager.Instance?.PlayJumpSfx();
         }
         if (isJumping && Input.GetButton("Jump"))
         {
             if (jumpTimer < jumpTime)
             {
-                rb.linearVelocity = Vector2.up * jumpForce;
+                rb.velocity = Vector2.up * jumpForce;
                 jumpTimer += Time.deltaTime;
             }
             else
