@@ -32,7 +32,15 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
-        finalScoreText.text = $"Score: {ScoreManager.Instance.Score}";
+
+        int score = ScoreManager.Instance.Score;
+        if (score > ScoreManager.Instance.HighScore)
+        {
+            ScoreManager.Instance.HighScore = score;
+            ScoreManager.Instance.SaveHighScore();
+        }
+
+        finalScoreText.text = $"Score: {score}\nHigh Score: {ScoreManager.Instance.HighScore}";
         gameOverScreen.SetActive(true);
         snake.enabled = false;
     }

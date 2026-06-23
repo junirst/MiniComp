@@ -13,6 +13,9 @@ public class ScoreManager : MonoBehaviour
 
     public int Score => score;
     public int Combo => combo;
+    public int HighScore { get; set; }
+
+    private const string HighScoreKey = "SnakeHighScore";
 
     private void Awake()
     {
@@ -22,6 +25,7 @@ public class ScoreManager : MonoBehaviour
             return;
         }
         Instance = this;
+        LoadHighScore();
     }
 
     private void Update()
@@ -49,6 +53,17 @@ public class ScoreManager : MonoBehaviour
 
         score += basePoints * combo;
         timeSinceLastFood = 0f;
+    }
+
+    public void SaveHighScore()
+    {
+        PlayerPrefs.SetInt(HighScoreKey, HighScore);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadHighScore()
+    {
+        HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
     }
 
     public void Reset()
