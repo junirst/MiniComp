@@ -1,22 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Food : MonoBehaviour
 {
     public BoxCollider2D gridArea;
+
     private void Start()
     {
         RandomizedPosition();
     }
+
     private void RandomizedPosition()
     {
-        Bounds bounds = this.gridArea.bounds;
+        Bounds bounds = gridArea.bounds;
 
         float x = Random.Range(bounds.min.x, bounds.max.x);
         float y = Random.Range(bounds.min.y, bounds.max.y);
 
-        this.transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y), 0.0f);
+        transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y), 0.0f);
     }
 
     public void Reposition()
@@ -26,7 +26,7 @@ public class Food : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             RandomizedPosition();
         }

@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Food food;
     [SerializeField] private TextMeshProUGUI finalScoreText;
 
-    private bool isGameOver;
+    public bool IsGameOver { get; private set; }
 
     private void Awake()
     {
@@ -26,12 +26,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gameOverScreen.SetActive(false);
+        SnakeAudioManager.Instance?.PlayBgm();
     }
 
     public void GameOver()
     {
-        if (isGameOver) return;
-        isGameOver = true;
+        if (IsGameOver) return;
+        IsGameOver = true;
 
         int score = ScoreManager.Instance.Score;
         if (score > ScoreManager.Instance.HighScore)
@@ -43,16 +44,24 @@ public class GameManager : MonoBehaviour
         finalScoreText.text = $"Score: {score}\nHigh Score: {ScoreManager.Instance.HighScore}";
         gameOverScreen.SetActive(true);
         snake.enabled = false;
+
+        if (PauseManager.Instance != null && PauseManager.Instance.IsPaused)
+            PauseManager.Instance.Resume();
+
+        SnakeAudioManager.Instance?.StopBgm();
+        SnakeAudioManager.Instance?.PlayGameOverSfx();
     }
 
     public void Retry()
     {
-        isGameOver = false;
+        IsGameOver = false;
+        Time.timeScale = 1f;
         gameOverScreen.SetActive(false);
         snake.enabled = true;
         snake.ResetState();
         food.Reposition();
         ScoreManager.Instance.Reset();
+        SnakeAudioManager.Instance?.PlayBgm();
     }
 
     public void LoadMainMenu()

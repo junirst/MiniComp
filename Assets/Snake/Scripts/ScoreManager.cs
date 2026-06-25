@@ -5,15 +5,16 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance { get; private set; }
 
     [SerializeField] private int basePoints = 10;
-    [SerializeField] private float comboWindow = 3f;
 
     private int score;
-    private int combo;
-    private float timeSinceLastFood;
+    private int highScore;
 
     public int Score => score;
-    public int Combo => combo;
-    public int HighScore { get; set; }
+    public int HighScore
+    {
+        get => highScore;
+        set => highScore = value;
+    }
 
     private const string HighScoreKey = "SnakeHighScore";
 
@@ -28,48 +29,24 @@ public class ScoreManager : MonoBehaviour
         LoadHighScore();
     }
 
-    private void Update()
-    {
-        if (combo <= 1) return;
-
-        timeSinceLastFood += Time.deltaTime;
-        if (timeSinceLastFood >= comboWindow)
-        {
-            combo = 1;
-            timeSinceLastFood = 0f;
-        }
-    }
-
     public void OnFoodEaten()
     {
-        if (timeSinceLastFood < comboWindow && timeSinceLastFood > 0f)
-        {
-            combo++;
-        }
-        else
-        {
-            combo = 1;
-        }
-
-        score += basePoints * combo;
-        timeSinceLastFood = 0f;
+        score += basePoints;
     }
 
     public void SaveHighScore()
     {
-        PlayerPrefs.SetInt(HighScoreKey, HighScore);
+        PlayerPrefs.SetInt(HighScoreKey, highScore);
         PlayerPrefs.Save();
     }
 
     public void LoadHighScore()
     {
-        HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
     }
 
     public void Reset()
     {
         score = 0;
-        combo = 1;
-        timeSinceLastFood = 0f;
     }
 }
