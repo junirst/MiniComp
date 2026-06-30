@@ -3159,7 +3159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 1123399959}
-  animationFrameRate: 0.1
+  animationFrameRate: 0.15
   idleFrames:
   - {fileID: -716045684, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}
   - {fileID: 274376622, guid: 8863779e4e370fa4b9a2acc1f145bc19, type: 3}

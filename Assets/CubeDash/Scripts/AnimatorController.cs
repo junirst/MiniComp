@@ -29,6 +29,7 @@ public class AnimatorController : MonoBehaviour
     private AnimationState previousState = AnimationState.Idle;
     private int currentFrameIndex = 0;
     private float frameTimer = 0f;
+    private bool isLocked = false;
     #endregion
 
     private void Start()
@@ -46,12 +47,25 @@ public class AnimatorController : MonoBehaviour
 
     private void UpdateAnimation()
     {
+        if (spriteRenderer == null)
+        {
+            return;
+        }
+
         if (currentState != previousState)
         {
             currentFrameIndex = 0;
             frameTimer = 0f;
             previousState = currentState;
         }
+
+        Sprite[] currentFrames = GetCurrentFrameArray();
+        if (currentFrames.Length == 0)
+        {
+            return;
+        }
+
+        spriteRenderer.sprite = currentFrames[currentFrameIndex];
 
         frameTimer += Time.deltaTime;
 
@@ -60,16 +74,12 @@ public class AnimatorController : MonoBehaviour
             frameTimer = 0f;
             currentFrameIndex++;
 
-            Sprite[] currentFrames = GetCurrentFrameArray();
             if (currentFrameIndex >= currentFrames.Length)
             {
                 currentFrameIndex = 0;
             }
 
-            if (spriteRenderer != null && currentFrames.Length > 0)
-            {
-                spriteRenderer.sprite = currentFrames[currentFrameIndex];
-            }
+            spriteRenderer.sprite = currentFrames[currentFrameIndex];
         }
     }
 
@@ -88,7 +98,56 @@ public class AnimatorController : MonoBehaviour
     #region Public Methods
     public void SetAnimationState(AnimationState state)
     {
+        if (isLocked)
+        {
+            return;
+        }
+
         currentState = state;
+    }
+
+    public void LockAnimationState(AnimationState state)
+    {
+        isLocked = true;
+        currentState = state;
+        previousState = state;
+        currentFrameIndex = 0;
+        frameTimer = 0f;
+
+        Sprite[] currentFrames = GetCurrentFrameArray();
+        if (spriteRenderer != null && currentFrames.Length > 0)
+        {
+            spriteRenderer.sprite = currentFrames[0];
+        }
+    }
+
+    public void ResetAnimationState(AnimationState state = AnimationState.Idle)
+    {
+        isLocked = false;
+        currentState = state;
+        previousState = state;
+        currentFrameIndex = 0;
+        frameTimer = 0f;
+
+        Sprite[] currentFrames = GetCurrentFrameArray();
+        if (spriteRenderer != null && currentFrames.Length > 0)
+        {
+            spriteRenderer.sprite = currentFrames[0];
+        }
+    }
+
+    public float GetAnimationDuration(AnimationState state)
+    {
+        Sprite[] frames = state switch
+        {
+            AnimationState.Idle => idleFrames,
+            AnimationState.Running => runningFrames,
+            AnimationState.Crouching => crouchingFrames,
+            AnimationState.Dead => deadFrames,
+            _ => idleFrames
+        };
+
+        return frames.Length * animationFrameRate;
     }
 
     public AnimationState GetCurrentAnimationState()

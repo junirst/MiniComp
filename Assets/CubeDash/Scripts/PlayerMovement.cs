@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
         {
             animatorController = GetComponent<AnimatorController>();
         }
+
+        UpdateAnimationState(false);
     }
 
     private void Update()
@@ -98,13 +100,20 @@ public class PlayerMovement : MonoBehaviour
         if (animatorController == null)
             return;
 
+        bool isPlaying = CubeGameManager.Instance != null && CubeGameManager.Instance.isPlaying;
+
+        if (!isPlaying)
+        {
+            animatorController.SetAnimationState(AnimatorController.AnimationState.Idle);
+            return;
+        }
+
         if (isCrouching)
         {
             animatorController.SetAnimationState(AnimatorController.AnimationState.Crouching);
         }
         else
         {
-            // Default to running state (can be changed to idle if needed based on velocity)
             animatorController.SetAnimationState(AnimatorController.AnimationState.Running);
         }
     }
